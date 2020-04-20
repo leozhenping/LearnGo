@@ -1,0 +1,50 @@
+CASE WHEN
+
+    case when 表达式 then 输出 when 表达式 then 输出 else 输出 end
+
+
+    案例: 将二班的学生转到1班， 将一班的学生转到二班， 三班的学生保持不变。
+
+
+    select id, name, (case when classid=1 then 2 when classid=2 then 1 else classid end) as A  from stu;
+
+
+
+CASE WHEN与聚集函数结合:
+
+    需求, 将如下表做转换，
+
+    name    学科      成绩                          NAME    基础      爬虫      SQL
+    A       基础       80                           A       80        78      90
+    B       基础       85                           B       85        76      92
+    C       基础       81                           C       81        80      93
+    A       爬虫       78             ------->
+    B       爬虫       76
+    C       爬虫       80
+    A       SQL       90
+    B       SQL       92
+    C       SQL       93
+
+
+
+    创建表:
+        CREATE TABLE scores(name char(3), stage char(6), score int );
+    插入数据:
+        INSERT INTO scores VALUES('A', '基础', 80),('B', '基础', 85),('C', '基础', 81),('A', '爬虫', 78),('B', '爬虫', 76),('C', '爬虫', 80),('A', 'SQL', 90),('B', 'SQL', 92),('C', 'SQL', 93);
+
+    实现:
+        select name,
+        max(case when stage='基础' then score else NULL end) as '基础',
+        max(case when stage='爬虫' then score else NULL end) as '爬虫',
+        max(case when stage='SQL' then score else NULL end) as 'SQL'
+        from  scores group by name;
+
+
+    输出结果:
+        +------+--------+--------+------+
+        | name | 基础   | 爬虫   | SQL  |
+        +------+--------+--------+------+
+        | A    |     80 |     78 |   90 |
+        | B    |     85 |     76 |   92 |
+        | C    |     81 |     80 |   93 |
+        +------+--------+--------+------+

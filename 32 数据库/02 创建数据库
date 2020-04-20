@@ -1,0 +1,21 @@
+
+
+创建数据库
+    CREATE DATABASE name
+
+创建表:
+    CREATE TABLE stu(id int primary key, name char(10), classid int) default charset=utf8mb4;
+
+
+插入数据:
+    INSERT INTO stu(id,name,classid) VALUES (1,'zhenping',1)
+    INSERT INTO stu(id,name,classid) VALUES (2, 'fukun',2), (3, 'weizi', 3), (4,'chao', 1), (5, 'peng', 2)
+
+
+清空数据表:
+    TRUNCATE table_name
+    TRUNCATE TABLE table_name
+
+
+
+

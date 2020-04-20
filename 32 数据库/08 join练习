@@ -1,0 +1,31 @@
+
+
+1. 创建表
+    CREATE TABLE if not exists Employee(id int, Name varchar(255), Salary int, Manage_id int);
+    Truncate table Employee;
+    INSERT INTO Employee(id, name, salary, manage_id) values(1,'joe', '70000','3'),(2, 'Henry', '80000',4),(3,'Sam', '60000','None'),(4,'Max','90000','None');
+
+2. 表信息
+    mysql> select * from Employee;
+    +------+-------+--------+-----------+
+    | id   | Name  | Salary | Manage_id |
+    +------+-------+--------+-----------+
+    |    1 | joe   |  70000 |         3 |
+    |    2 | Henry |  80000 |         4 |
+    |    3 | Sam   |  60000 |         0 |
+    |    4 | Max   |  90000 |         0 |
+    +------+-------+--------+-----------+
+    4 rows in set (0.00 sec)
+
+
+3. 需求
+    查询员工比经理工资高的人。
+
+
+    mysql> select  e1.Name from Employee e1 JOIN Employee e_m2 ON e1.Manage_id = e_m2.id where e1.Salary > e_m2.Salary;
+    +------+
+    | Name |
+    +------+
+    | joe  |
+    +------+
+    1 row in set (0.00 sec)

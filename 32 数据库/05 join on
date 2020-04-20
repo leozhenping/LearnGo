@@ -1,0 +1,72 @@
+join : 连接
+
+on : 条件筛选， 他是在where条件之前执行的。
+
+
+    需求: 查询学生的班主任名称
+
+
+    1. 创建表
+        CREATE TABLE students(id int primary key, name char(12), class_id int)  default charset=utf8mb4;
+        CREATE TABLE class(id int primary key, name char(12), manager char(12)) default charset=utf8mb4;
+
+    2. 插入数据
+        INSERT INTO students(id, name, class_id) values(1, 'A', 1), (2, 'B', 2), (3, 'C', 3),(4, 'D',1),(5,'E',2),(6,'F',3);
+        INSERT INTO class(id, name, manager) values(1,'普通班','zhenping'),(2,'大神班', 'weizi'),(3,'超越班', 'fukun');
+
+
+    3. 数据表展示:
+        mysql> select * from students;
+        +----+------+----------+
+        | id | name | class_id |
+        +----+------+----------+
+        |  1 | A    |        1 |
+        |  2 | B    |        2 |
+        |  3 | C    |        3 |
+        |  4 | D    |        1 |
+        |  5 | E    |        2 |
+        |  6 | F    |        3 |
+        +----+------+----------+
+        6 rows in set (0.00 sec)
+
+        mysql> select * from class;
+        +----+-----------+----------+
+        | id | name      | manager  |
+        +----+-----------+----------+
+        |  1 | 普通班    | zhenping |
+        |  2 | 大神班    | weizi    |
+        |  3 | 超越班    | fukun    |
+        +----+-----------+----------+
+        3 rows in set (0.00 sec)
+
+
+    4. Join 表
+        mysql> select students.id, students.name, class.name, class.manager from students join class on students.class_id = class.id;
+        +----+------+-----------+----------+
+        | id | name | name      | manager  |
+        +----+------+-----------+----------+
+        |  1 | A    | 普通班    | zhenping |
+        |  2 | B    | 大神班    | weizi    |
+        |  3 | C    | 超越班    | fukun    |
+        |  4 | D    | 普通班    | zhenping |
+        |  5 | E    | 大神班    | weizi    |
+        |  6 | F    | 超越班    | fukun    |
+        +----+------+-----------+----------+
+        6 rows in set (0.00 sec)
+
+
+
+        mysql> select students.id, students.name, class.name, class.manager from students join class where students.class_id = class.id;  # 此处on是可以使用where替代。
+        +----+------+-----------+----------+
+        | id | name | name      | manager  |
+        +----+------+-----------+----------+
+        |  1 | A    | 普通班    | zhenping |
+        |  2 | B    | 大神班    | weizi    |
+        |  3 | C    | 超越班    | fukun    |
+        |  4 | D    | 普通班    | zhenping |
+        |  5 | E    | 大神班    | weizi    |
+        |  6 | F    | 超越班    | fukun    |
+        +----+------+-----------+----------+
+        6 rows in set (0.00 sec)
+
+

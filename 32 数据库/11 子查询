@@ -1,0 +1,51 @@
+一、Where中的子查询
+
+    需求: 查询zhenping所带的学生信息
+
+
+    1. 创建表
+        CREATE TABLE students(id int primary key, name char(12), class_id int)  default charset=utf8mb4;
+        CREATE TABLE class(id int primary key, name char(12), manager char(12)) default charset=utf8mb4;
+
+    2. 插入数据
+        INSERT INTO students(id, name, class_id) values(1, 'A', 1), (2, 'B', 2), (3, 'C', 3),(4, 'D',1),(5,'E',2),(6,'F',3);
+        INSERT INTO class(id, name, manager) values(1,'普通班','zhenping'),(2,'大神班', 'weizi'),(3,'超越班', 'fukun');
+
+
+    3. 数据表展示:
+        mysql> select * from students;
+        +----+------+----------+
+        | id | name | class_id |
+        +----+------+----------+
+        |  1 | A    |        1 |
+        |  2 | B    |        2 |
+        |  3 | C    |        3 |
+        |  4 | D    |        1 |
+        |  5 | E    |        2 |
+        |  6 | F    |        3 |
+        +----+------+----------+
+        6 rows in set (0.00 sec)
+
+        mysql> select * from class;
+        +----+-----------+----------+
+        | id | name      | manager  |
+        +----+-----------+----------+
+        |  1 | 普通班    | zhenping |
+        |  2 | 大神班    | weizi    |
+        |  3 | 超越班    | fukun    |
+        +----+-----------+----------+
+        3 rows in set (0.00 sec)
+
+
+        查询zhenping所带的班级: select id from class where manager = 'zhenping'
+        查询学生: select name from students where class_id = 1;
+
+        子查询组合:
+            select name from students where class_id = (select id from class where manager = 'zhenping');
+
+
+二、Select中的子查询
+
+注意:
+    子查询如果在where或select中时，相当于子查询先计算结果再判断。
+

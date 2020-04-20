@@ -1,0 +1,78 @@
+数据库基础:
+
+    select 基本格式
+        select ... from ... where ... group by ... having ... order by ... limit ...
+
+        select 输出 from 获取数据 where 过滤 group by 分组 having 过滤 order by 排序 Limit 限定数量;
+
+
+        执行流程顺序:
+            1. from
+            2. where
+            3. group by
+            4. select
+            5. having
+            6. order by
+
+
+        分组:
+            group by : 内容相同的分成一组。
+
+
+            示例:
+            select * from stu group by classid
+            注意:
+                group by会将classid进行分组，当遇到select的时候，会将每个组的第一行进行展示，其他内容将丢弃。
+
+            select id, classid from stu where id %2 = 0 group by classid;
+
+            select * from stu group by classid DESC;  #降序
+            select * from stu group by classid ASC;   #升序
+
+
+            聚集函数:
+                1. count: 计数（数一下有多少行）
+                    select count(1), classid from stu group by classid
+
+                    select count(name), classid from stu group by classid  #对classid进行分组，并统计同组中name有多少行。它是不去重的。
+
+                    count(1)与count(name)的区别:
+                        如果name中有NuLl， 那么count(name)不记录null值，其它情况二者一致。
+
+
+                distinct:  去重
+                    select count(distinct Name), clid from stu group by classid #对Name列进行去重，重复的行不计算数量。
+                    select count(distinct 1), clid from stu group by classid  #对tmp临时列进行统计，统计结果为1
+
+
+                    from stu group by clid, name  # clid与name都相同的会被分到一组。
+
+                2. Sum: 求和
+                    sum(1) == count(1)
+                    sum(id)  #去除Null, 并对id进行相加
+                    sum(distinct id) #去除null值，并且去掉重复id. 并加id的值.
+                3. max: 最大值
+                4. min: 最小值
+                5. avg: 平均值
+                6. group_concat: 字符串集合
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

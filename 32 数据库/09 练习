@@ -1,0 +1,120 @@
+
+1. 学生表
+    Student(SId, Sname, Sage,Ssex)
+    -- SId 学生编号, Sname 学生姓名 Sage 出生年月 Ssex 学生性别
+2. 课件表
+    Course(CId, Cname, TId)
+    -- CId 课程编号， Cname 课程名称， TId 教师编号
+3. 教师表
+    Teacher(TId, Tname)
+    -- TId 教师编号， Tname 教师姓名
+4. 成绩表
+    SC(SId, CId, score)
+    -- SId 学生编号， CId 课程编号， Score 分数
+
+
+根据表字段，创建表
+    CREATE TABLE Student(SId int primary key, Sname varchar(255) , Sage int ,Ssex varchar(255) ) default charset=utf8mb4;
+    CREATE TABLE Course(CId int primary key, Cname varchar(255) , TId int) default charset=utf8mb4;
+    CREATE TABLE Teacher(TId int primary key, Tname varchar(255)) default charset=utf8mb4;
+    CREATE TABLE SC(SId int, CId int, score int) default charset=utf8mb4;
+
+    INSERT INTO Student(SId, Sname, Sage,Ssex) values (1, 'A', 18, '男'), (2, 'B', 19, '女'),(3, 'C', 20, '男'),(4, 'D', 19, '女'),(5, 'E', 18, '男'),(6, 'F', 17, '女'),(7, 'G', 22, '男'),(8, 'H', 16, '女');
+    INSERT INTO Course(CId, Cname, TId) values (1, '语文', 1),(2, '数学', 2);
+    INSERT INTO Teacher(TId, Tname) values (1, 'zhenping'), (2, 'weizi');
+    INSERT INTO SC(SId, CId, score) values (1, 1, 89),(1, 2, 90),(2, 1, 91),(2, 2, 89),(3, 1, 78),(3, 2, 63),(4, 1, 82),(4, 2, 80),(5, 1, 87),(5, 2, 85),(6, 1, 83),(6, 2, 91),(7, 1, 67),(7, 2, 90),(8, 1, 99),(8, 2, 85);
+
+
+表信息:
+    mysql> select * from Course;
+    +-----+--------+------+
+    | CId | Cname  | TId  |
+    +-----+--------+------+
+    |   1 | 语文   |    1 |
+    |   2 | 数学   |    2 |
+    +-----+--------+------+
+    2 rows in set (0.00 sec)
+
+    mysql> select * from Student;
+    +-----+-------+------+------+
+    | SId | Sname | Sage | Ssex |
+    +-----+-------+------+------+
+    |   1 | A     |   18 | 男   |
+    |   2 | B     |   19 | 女   |
+    |   3 | C     |   20 | 男   |
+    |   4 | D     |   19 | 女   |
+    |   5 | E     |   18 | 男   |
+    |   6 | F     |   17 | 女   |
+    |   7 | G     |   22 | 男   |
+    |   8 | H     |   16 | 女   |
+    +-----+-------+------+------+
+    8 rows in set (0.00 sec)
+
+    mysql> select * from Sc;
+    +------+------+-------+
+    | SId  | CId  | score |
+    +------+------+-------+
+    |    1 |    1 |    89 |
+    |    1 |    2 |    90 |
+    |    2 |    1 |    91 |
+    |    2 |    2 |    89 |
+    |    3 |    1 |    78 |
+    |    3 |    2 |    63 |
+    |    4 |    1 |    82 |
+    |    4 |    2 |    80 |
+    |    5 |    1 |    87 |
+    |    5 |    2 |    85 |
+    |    6 |    1 |    83 |
+    |    6 |    2 |    91 |
+    |    7 |    1 |    67 |
+    |    7 |    2 |    90 |
+    |    8 |    1 |    99 |
+    |    8 |    2 |    85 |
+    +------+------+-------+
+    16 rows in set (0.00 sec)
+
+    mysql> select * from Teacher;
+    +-----+----------+
+    | TId | Tname    |
+    +-----+----------+
+    |   1 | zhenping |
+    |   2 | weizi    |
+    +-----+----------+
+    2 rows in set (0.00 sec)
+
+
+需求:
+    查询'语文'课程比'数学'课程成绩高的学生的信息及课程分数。
+
+	mysql> select sc1.score as '语文', sc2.score as '数学', s.Sname from sc sc1 join sc sc2 on sc1.CId=1 and sc2.CId=2 and sc1.SId = sc2.SId join Student s on sc1.SId = s.SId where sc1.score > sc2.score;
+	+--------+--------+-------+
+	| 语文   | 数学   | Sname |
+	+--------+--------+-------+
+	|     91 |     89 | B     |
+	|     78 |     63 | C     |
+	|     82 |     80 | D     |
+	|     87 |     85 | E     |
+	|     99 |     85 | H     |
+	+--------+--------+-------+
+
+    查询平均成绩大于等于90分的同学的学生编号和学生姓名和平均成绩。
+
+    mysql> select sc.SId, student.Sname, avg(sc.score) as avg_score from sc join student on sc.SId = student.SId group by sc.SId having avg_score >= 90;
+    +------+-------+-----------+
+    | SId  | Sname | avg_score |
+    +------+-------+-----------+
+    |    2 | B     |   90.0000 |
+    |    8 | H     |   92.0000 |
+    +------+-------+-----------+
+    2 rows in set (0.00 sec)
+
+    降序排序.
+    mysql> select sc.SId, student.Sname, avg(sc.score) as avg_score from sc join student on sc.SId = student.SId group by sc.SId having avg_score >= 90 order by avg_score desc;
+    +------+-------+-----------+
+    | SId  | Sname | avg_score |
+    +------+-------+-----------+
+    |    8 | H     |   92.0000 |
+    |    2 | B     |   90.0000 |
+    +------+-------+----------
+
+

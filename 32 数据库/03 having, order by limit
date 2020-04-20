@@ -1,0 +1,23 @@
+
+select * from stu where 1=1 group by clid; #where 1=1表示永远为true.
+
+
+having: 过滤
+    查询每个班中人数大于2个的班级号
+        SELECT count(1) as n, class_id FROM stu GROUP BY class_id HAVING n >2;
+        SELECT class_id FROM stu group by class_id having count(1) > 2; #count(1)其实也是select时计算出来的，只是显示的时候给隐藏了。 所以拿到having处可以过滤使用。
+
+
+        注意:
+            WHERE是接受FROM的数据输入.
+            HAVING接受的是SELECT的数据输入。
+
+
+order by: 排序
+    SELECT class_id FROM stu GROUP BY class_id HAVING count(1) > 2 ORDER BY count(1) DESC;
+
+
+limit : 限制输出行
+    select classid from stu group by classid having count(1) >2 order by count(1) asc limit 1;
+    select classid from stu group by classid having count(1) >1 order by count(1) asc limit 1,3;
+    select count(1) as n,classid from stu group by classid having n >1 order by n,classid asc limit 1,3; # limit 1表示偏移量, 3表示要显示的条目数

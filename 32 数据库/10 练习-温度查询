@@ -1,0 +1,34 @@
+
+1. 创建表
+    CREATE TABLE `mst_weather`(
+        `id` int(10) unsigned NOT NULL AUTO_INCREMENT primary key,
+        `date` date DEFAULT NULL,
+        `temperature` int(255) DEFAULT NULL
+    )
+
+    INSERT INTO mst_weather(id,date, temperature) values (1, '2020-04-01', 20),(2, '2020-04-02', 25),(3, '2020-04-03', 21),(4, '2020-04-04', 24);
+
+
+2. 表信息:
+    mysql> select * from mst_weather;
+    +----+------------+-------------+
+    | id | date       | temperature |
+    +----+------------+-------------+
+    |  1 | 2020-04-01 |          20 |
+    |  2 | 2020-04-02 |          25 |
+    |  3 | 2020-04-03 |          21 |
+    |  4 | 2020-04-04 |          24 |
+    +----+------------+-------------+
+
+
+
+3. 需求:
+    查询后一天temperature比前一天高的date
+
+    mysql> select m2.date from mst_weather as m1 join mst_weather as m2 on m1.id + 1 = m2.id where m2.temperature > m1.temperature;
+    +------------+
+    | date       |
+    +------------+
+    | 2020-04-02 |
+    | 2020-04-04 |
+    +------------+

@@ -1,0 +1,56 @@
+
+left join与join的区别:
+    1. left join 必须有on条件
+    2. left join 会检查左边表的数据是否都包含在新生成的表中(此处的新表是: stu join class产生的)。如果是都包含，与join无区别。 如果不是都包含， 那么会用NULL与不包含的行组成新行，加入新表。
+
+
+
+    1. 创建表
+        CREATE TABLE stu(id int primary key, name char(12), class_id int) default charset=utf8mb4;
+        CREATE TABLE class(id int primary key, name char(12), manager_name char(12)) default charset=utf8mb4;
+    2. 插入数据
+        INSERT INTO stu(id, name, class_id) values (1, 'A', 1), (2, 'B',1),(3,'C',2);
+        INSERT INTO class(id, name, manager_name) values (1, '大神班', 'zhenping');
+
+    3. 查看数据
+        mysql> select * from stu;
+        +----+------+----------+
+        | id | name | class_id |
+        +----+------+----------+
+        |  1 | A    |        1 |
+        |  2 | B    |        1 |
+        |  3 | C    |        2 |
+        +----+------+----------+
+        3 rows in set (0.00 sec)
+
+        mysql> select * from class;
+        +----+-----------+--------------+
+        | id | name      | manager_name |
+        +----+-----------+--------------+
+        |  1 | 大神班    | zhenping     |
+        +----+-----------+--------------+
+        1 row in set (0.00 sec)
+    4. left join 展示:
+
+        mysql> select * from stu left join class on stu.class_id = class.id;
+        +----+------+----------+------+-----------+--------------+
+        | id | name | class_id | id   | name      | manager_name |
+        +----+------+----------+------+-----------+--------------+
+        |  1 | A    |        1 |    1 | 大神班    | zhenping     |
+        |  2 | B    |        1 |    1 | 大神班    | zhenping     |
+        |  3 | C    |        2 | NULL | NULL      | NULL         |
+        +----+------+----------+------+-----------+--------------+
+        3 rows in set (0.00 sec)
+
+
+        mysql> select * from class left join stu on class.id = stu.class_id;
+        +----+-----------+--------------+------+------+----------+
+        | id | name      | manager_name | id   | name | class_id |
+        +----+-----------+--------------+------+------+----------+
+        |  1 | 大神班    | zhenping     |    1 | A    |        1 |
+        |  1 | 大神班    | zhenping     |    2 | B    |        1 |
+        +----+-----------+--------------+------+------+----------+
+        2 rows in set (0.00 sec)
+
+
+
