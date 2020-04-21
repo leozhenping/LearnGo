@@ -45,6 +45,11 @@
 
 
 二、Select中的子查询
+三、having中的子查询, 不常见
+四、on中的子查询, 不常见
+五、From中的子查询
+    示例:
+        select stu.name from stu join (select * from class where manager='zhenping') as c  on stu.class_id = c.id;        #在from中的子查询，必须有别名
 
 注意:
     子查询如果在where或select中时，相当于子查询先计算结果再判断。

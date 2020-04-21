@@ -54,3 +54,6 @@ left join与join的区别:
 
 
 
+
+    right join : 右边的表在左边没有记录，将显示为NULL
+    left join : 右边的表在右边没有记录， 将显示为NULL
