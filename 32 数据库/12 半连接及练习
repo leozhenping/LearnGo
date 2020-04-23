@@ -232,3 +232,56 @@
         +-----+-------+------+------+------+------+-------+
         |   6 | F     |   17 | 女   |    6 |    1 |    83 |
         +-----+-------+------+------+------+------+-------+
+
+    需求: 查询至少有一门课与学员为"01"的同学所学相同的同学信息
+        分析；
+            -- 1. 找到所有的01学生学习过的科目信息
+            -- 2. 找出学习过这几门科目的学生的信息，去重就可以
+
+        SQL: 子查询实现
+            select * from student where SId in (
+                select SId from sc where cid in (
+                    select cid from sc where SId = '1'
+                    )
+                );
+        SQL: Join实现
+           select distinct student.* from sc as s1 join sc as s2 on s1.SId='1' and s1.CId = s2.CId join student on s2.SId = student.SId;
+           select  student.* from sc as s1 join sc as s2 on s1.SId='1' and s1.CId = s2.CId join student on s2.SId = student.SId group by student.SId;
+
+    需求: 查询和01号的同学学习的课程 ，完全相同的其他同学的信息
+        分析:
+            -- 1. 取出第一个表，这个表中包含的是所有01学生的课程情况
+            -- 2. 取出第二个表
+            -- 3. 将这两个表进行Join， 要求他们课程相等, 但第二个表不包含学员01
+            -- 4. 判断right join后的其他学生的课程数量，如果数量与01相等，好那么就说明与01课程数量一致。判断没有NULL的列
+
+        SQL:
+            select
+                student.*
+            from
+                sc as s1 right join sc as s2 on s1.SId='1' and s1.CId = s2.CId  join student on student.SId = s2.SId
+            where
+                s2.SId != 1
+            group by
+                s2.SId
+            having
+                count(s2.SId) = (select count(1) from sc where SId = '01') -- 判断课程数量是否相等
+                and
+                count(s2.SID) = count(s1.SId); -- 判断课程是否相等
+
+
+    需求: 查询两门及其以上不及格课程的同学的学号，姓名及平均成绩。
+
+        分析:
+            -- 1. 因为每一个学生都有一个姓名和平均成绩，使用group by
+            -- 2. 找到两门课，代表着需要用COUNT
+            -- 3. 不及格: 小于85， 可以使用case when 配合count计算不及格的数量。
+
+        SQL:
+            select
+                st.* FROM sc as s1 join student as st on st.SId = s1.SId
+            group by s1.SId
+            HAVING
+                count(
+                       case when s1.score < 85 then 1 else NULL end
+                ) >= 2 ;
