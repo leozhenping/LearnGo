@@ -1,0 +1,9 @@
+
+注意recover只有在defer函数中才有用，在defer的函数调用的函数中recover不起作用
+
+一般的panic都是能捕获的，比如: Slice越界、nil指针、除零、写关闭的chan。
+
+哪些不能Recover
+    Thread Limit，超过了系统的线程限制
+    Concurrent Map Writers，竞争条件，同时写map
+
