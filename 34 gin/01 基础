@@ -1,0 +1,10 @@
+1. 模板渲染
+
+解析模板文件函数
+    func (t *Template) Parse(src string) (*Template, error)
+    func ParseFiles(filenames ...string) (*Template, error)
+    func ParseGlob(pattern string) (*Template, error)
+
+渲染模板文件
+    func (t *Template) Execute(wr io.Writer, data interface{}) error
+    func (t *Template) ExecuteTemplate(wr io.Writer, name string, data interface{}) error

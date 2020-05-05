@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>TEST</title>
+</head>
+
+<body>
+<p>m1</p>
+{{ .m1.name }}
+{{ .m1.age }}
+{{ .m1.gender}}
+<p>s1</p>
+{{ .s1.Name }}
+{{ .s1.Age }}
+{{ .s1.Gender }}
+
+<hr>
+
+{{/* with 代码块，可以优化上面的引用方式，with中引用的name, age, gender都是m1中的字段。*/}}
+{{ with .m1 }}
+    {{ .name }}
+    {{ .age }}
+    {{ .gender }}
+{{ end }}
+
+</body>
+</html>
