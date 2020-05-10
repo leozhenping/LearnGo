@@ -23,6 +23,17 @@ package main
 	或者
 	authV1.USE(middleware_func1, middleware_func2,...)
 
+	中间件注意事项
+	1. gin默认中间件
+		gin.Default()默认使用了Logger和Recovery中间件，其中：
+			Logger中间件将日志写入gin.DefaultWriter，即使配置了GIN_MODE=release。
+			Recovery中间件会recover任何panic。如果有panic的话，会写入500响应码。
+		如果不想使用上面两个默认的中间件，可以使用gin.New()新建一个没有任何默认中间件的路由。
+
+	2. gin中间件中使用goroutine
+		当在中间件或handler中启动新的goroutine时，不能使用原始的上下文（c *gin.Context），必须使用其只读副本（c.Copy()）。
+
+
 */
 
 import (
