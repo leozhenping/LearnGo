@@ -1,0 +1,7 @@
+### pivot挂载根文件系统
+
+pivot_root是一个系统调用，主要功能是去改变当前的root文件系统。pivot_root可以将当前进程的root文件系统移动到put_old文件夹中，
+然后使new_root成为新的root 文件系统。new_root 和put_old必须不能同时存在当前root 的同一个文件系统中。pivot_root和chroot的主要区别是，
+pivot_root是把整个系统切换到一个新的root目录，而移除对之前root文件系统的依赖，这样你就能够umount原先的root文件系统。而chroot是针对某个进程，
+系统的其他部分依旧运行于老的root目录中。
+
