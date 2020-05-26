@@ -16,6 +16,7 @@ func makeArr(n int) []int {
 }
 
 func quickSort(s []int) []int {
+	fmt.Println(s)
 	if len(s) <= 1 {
 		return s
 	} else {
